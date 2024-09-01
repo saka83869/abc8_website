@@ -264,32 +264,35 @@
 <script>
 	let deferredPrompt;
 
-	const addShortcutButton = document.getElementById('addShortcut');
+const addShortcutButton = document.getElementById('addShortcut');
 
-	window.addEventListener('beforeinstallprompt', (e) => {
-		// Ngăn trình duyệt hiển thị hộp thoại mặc định
-		e.preventDefault();
-		// Lưu sự kiện để sử dụng sau
-		deferredPrompt = e;
-		// Hiển thị nút thêm lối tắt
-		// addShortcutButton.style.display = 'block';
-	});
+window.addEventListener('beforeinstallprompt', (e) => {
+	// Prevent the default browser prompt
+	e.preventDefault();
+	// Save the event for later use
+	deferredPrompt = e;
+	// Show the add to home screen button
+	addShortcutButton.style.display = 'block';
+});
 
-	addShortcutButton.addEventListener('click', async () => {
-		if (deferredPrompt) {
-			// Hiển thị hộp thoại thêm lối tắt
-			deferredPrompt.prompt();
-			const result = await deferredPrompt.userChoice;
-			if (result.outcome === 'accepted') {
-				console.log('Lối tắt đã được thêm vào màn hình chính!');
-			} else {
-				console.log('Người dùng đã từ chối thêm lối tắt.');
-			}
-			// Đặt lại deferredPrompt để không hiển thị lại nút
-			deferredPrompt = null;
+addShortcutButton.addEventListener('click', async () => {
+	if (deferredPrompt) {
+		// Show the prompt to the user
+		deferredPrompt.prompt();
+		// Wait for the user's response
+		const result = await deferredPrompt.userChoice;
+		if (result.outcome === 'accepted') {
+			console.log('Shortcut has been added to the home screen!');
 		} else {
-			alert('Không có lối tắt nào có thể thêm.');
+			console.log('User dismissed the prompt.');
 		}
-	});
+		// Reset the deferredPrompt variable to ensure the button is not shown again
+		deferredPrompt = null;
+		// Optionally hide the button after user interaction
+		addShortcutButton.style.display = 'none';
+	} else {
+		alert('No shortcut available to add.');
+	}
+});
 </script>
 </html>
