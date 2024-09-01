@@ -62,15 +62,7 @@
 		.form p {
 			font-weight: bold;
 			font-size: 24px;
-
-
 			margin-top: 20px;
-
-
-
-
-
-
 		}
 
 		.label {
@@ -115,8 +107,6 @@
 			;
 
 			box-shadow: 5.72px 24.31px 88.61px 0px #00000080, -4.29px -5.72px 10px 0px #FFFFFF26 inset;
-
-
 			border-radius: 99px;
 			text-transform: uppercase;
 			text-decoration: none;
@@ -124,7 +114,6 @@
 			font-size: 24px;
 			animation: ani-zoom 0.8s linear infinite;
 		}
-
 
 		@keyframes ani-zoom {
 			0% {
@@ -140,13 +129,12 @@
 			}
 		}
 
-
-
 		.nutback {
+			display: none; /* Ẩn nút khi bắt đầu */
 			background: none;
 			border: none;
 			cursor: pointer;
-			display: flex;
+			/* display: flex; */
 			align-items: center;
 			padding: 20px;
 		}
@@ -170,10 +158,6 @@
 		}
 
 		@media (max-width: 1024px) {}
-
-
-
-
 
 		@media (max-width: 768px) {
 			.content {
@@ -210,9 +194,6 @@
 			.nutback img {
 				width: 36px;
 			}
-
-
-
 		}
 
 
@@ -265,33 +246,39 @@
 	let deferredPrompt;
 
 const addShortcutButton = document.getElementById('addShortcut');
+addShortcutButton.style.display = 'none'; // Ẩn nút khi bắt đầu
 
 window.addEventListener('beforeinstallprompt', (e) => {
-	// Prevent the default browser prompt
+	// Ngăn trình duyệt hiển thị hộp thoại mặc định
 	e.preventDefault();
-	// Save the event for later use
+	// Lưu sự kiện để sử dụng sau
 	deferredPrompt = e;
-	// Show the add to home screen button
+	// Hiển thị nút thêm lối tắt
 	addShortcutButton.style.display = 'block';
+
+	// Tự động cuộn đến vị trí của nút để người dùng dễ dàng thấy
+	window.scrollTo({
+		top: addShortcutButton.offsetTop,
+		behavior: 'smooth'
+	});
 });
 
 addShortcutButton.addEventListener('click', async () => {
 	if (deferredPrompt) {
-		// Show the prompt to the user
+		// Hiển thị hộp thoại thêm lối tắt
 		deferredPrompt.prompt();
-		// Wait for the user's response
 		const result = await deferredPrompt.userChoice;
 		if (result.outcome === 'accepted') {
-			console.log('Shortcut has been added to the home screen!');
+			console.log('Lối tắt đã được thêm vào màn hình chính!');
 		} else {
-			console.log('User dismissed the prompt.');
+			console.log('Người dùng đã từ chối thêm lối tắt.');
 		}
-		// Reset the deferredPrompt variable to ensure the button is not shown again
+		// Đặt lại deferredPrompt để không hiển thị lại nút
 		deferredPrompt = null;
-		// Optionally hide the button after user interaction
+		// Ẩn nút sau khi người dùng bấm
 		addShortcutButton.style.display = 'none';
 	} else {
-		alert('No shortcut available to add.');
+		alert('Không có lối tắt nào có thể thêm.');
 	}
 });
 </script>
